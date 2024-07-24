@@ -32,4 +32,34 @@ module.exports = {
             res.status(500).json(error);
         }
     },
-};
+
+    async postNewUser(req, res) {
+        try {
+            const dbUserData = await User.create(req.body);
+            res.json(dbUserData); 
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    },
+
+    async updateUser(req, res) {
+        try {
+           const dbUserData = await User.findOneAndUpdate(req.body)
+                res.json(dbUserData);
+            
+    } catch (error) {
+        res.status(500).json(error);
+
+    }
+},
+
+    async deleteUser(req, res) {
+       try {
+        const dbUserData = await User.findOneAndDelete(req.body)
+        res.json(dbUserData);
+       } catch (error) {
+        res.status(500).json(error)
+       }
+    },
+}
+
