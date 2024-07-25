@@ -33,14 +33,7 @@ module.exports = {
         }
     },
 
-    async postNewUser(req, res) {
-        try {
-            const dbUserData = await User.create(req.body);
-            res.json(dbUserData); 
-        } catch (error) {
-            res.status(500).json(error);
-        }
-    },
+    
 
     async updateUser(req, res) {
         try {

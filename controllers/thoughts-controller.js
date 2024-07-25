@@ -18,7 +18,7 @@ module.exports = {
             const thought = await Thought.findOne({_id: req.params.thoughtId});
 
             if (!thought) {
-                return res.status(404).json({message: "No thoughts, only vibes"});
+                return res.status(404).json({message: "No thoughts here, only vibes"});
             }
             res.json(thought);
         } catch (error) {
@@ -34,4 +34,8 @@ module.exports = {
             res.status(500).json(error);
         }
     },
+
+    // async updateThought(req, res) {
+    //     try {}
+    // }
 };

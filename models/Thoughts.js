@@ -1,9 +1,10 @@
-//how to get date
+//how to get date, set value to current timestamp, use getter method to format timestamp on query
 //how to array in reactions, nested documents created with reaction schema???
 //create virtual called reactionCount somehow?
 
-const { Schema, model } = require("mongoose");
 
+const { Schema, model } = require("mongoose");
+const reactionSchema = require("./Reactions")
 
 
 const thoughtSchema = new Schema(
@@ -17,6 +18,8 @@ const thoughtSchema = new Schema(
 
         createdAt: {
             type: Date,
+            default: Date.now,
+            timestamps: true,
             
 
         },
@@ -26,10 +29,16 @@ const thoughtSchema = new Schema(
             required: true,
         },
 
-        reactions: {
+        reactions: [reactionSchema],
 
+        }, 
+        {
+        toJSON: {
+            getters: true,
+        },
         }
-    }
-)
+    
+);
 
-module.exports = thoughtText;
+const Thought = model("Thought", thoughtSchema)
+module.exports = Thought;
