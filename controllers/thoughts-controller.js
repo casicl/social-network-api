@@ -1,3 +1,4 @@
+const { appendFileSync } = require("fs");
 const Thought = require("../models/Thoughts");
 
 module.exports = {
@@ -35,7 +36,67 @@ module.exports = {
         }
     },
 
-    // async updateThought(req, res) {
-    //     try {}
-    // }
+ async updateThought(req, res) {
+     try {
+        const dbThoughtData= await Thought.findByIdAndUpdate(
+            {_id: req.params.thoughtId},
+            {thoughtText: req.body.thoughtText},
+            {new: true}
+        );
+        res.json(dbThoughtData);
+        
+     } catch (error) {
+        res.status(500).json(error);
+     }
+ },
+ 
+ async deleteThought(req, res) {
+    try {
+        const {id} = req.params;
+        const dbThoughtData = await Thought.findByIdAndDelete(
+            {_id: req.params.thoughtId},
+            
+        );
+
+        if (!dbThoughtData) {
+            return res.status(404).json({message: "Thought not found"})
+        }
+        res.json(dbThoughtData);
+    } catch (error) {
+        res.status(500).json(error)
+    }
+ },
+ async addReaction(req, res) {
+    try {
+        const thought = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$addToSet: {reactions: req.body}},
+            {runValidators: true, new: true}
+        );
+        if (!thought) {
+            return res.status(404).json({message: "No thought with that ID"});
+        }
+        res.json(thought);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+ },
+
+ async deleteReaction(req, res) {
+    try {
+        const thought = await Thought.findByIdAndUpdate(
+            // req.params.thoughtId,
+            // {_id: req.params.reactionId},
+            {_id: req.params.thoughtId},
+            {$pull: {reactions: {reactionId: req.params.reactionId}}},
+            {runValidators: true, new: true}
+        );
+        if (!thought) {
+            return res.status(404).json({message: "No thought with that ID"});
+        }
+        res.json(thought);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+ },
 };
