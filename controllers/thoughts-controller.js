@@ -29,8 +29,8 @@ module.exports = {
 
     async createThought(req, res) {
         try {
-            const dbUserData = await Thought.create(req.body);
-            res.json(dbUserData);
+            const user = await Thought.create(req.body);
+            res.json(user);
         } catch (error) {
             res.status(500).json(error);
         }
@@ -38,12 +38,12 @@ module.exports = {
 
  async updateThought(req, res) {
      try {
-        const dbThoughtData= await Thought.findByIdAndUpdate(
+        const thought = await Thought.findByIdAndUpdate(
             {_id: req.params.thoughtId},
             {thoughtText: req.body.thoughtText},
             {new: true}
         );
-        res.json(dbThoughtData);
+        res.json(thought);
         
      } catch (error) {
         res.status(500).json(error);
@@ -53,15 +53,15 @@ module.exports = {
  async deleteThought(req, res) {
     try {
         const {id} = req.params;
-        const dbThoughtData = await Thought.findByIdAndDelete(
+        const thought = await Thought.findByIdAndDelete(
             {_id: req.params.thoughtId},
             
         );
 
-        if (!dbThoughtData) {
+        if (!thought) {
             return res.status(404).json({message: "Thought not found"})
         }
-        res.json(dbThoughtData);
+        res.json(thought);
     } catch (error) {
         res.status(500).json(error)
     }
