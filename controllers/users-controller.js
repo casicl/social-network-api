@@ -14,6 +14,10 @@ module.exports = {
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({_id: req.params.userId}).populate("friends");
+            // ({
+            //     path: "friends",
+            //     select: "username"
+            // });
     
             if (!user) {
                 return res.status(404).json({ message: "No user with this ID" });
@@ -81,7 +85,7 @@ module.exports = {
     try {
         const user = await User.findByIdAndUpdate(
             {_id: req.params.userId},
-            {$pull: {friend: {friendId: req.params.friendId}}},
+            {$pull: {friends: req.params.friendId}},
             {runValidators: true, new: true}
         );
         if (!user) {
