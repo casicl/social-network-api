@@ -4,10 +4,14 @@
 
 
 const { Schema, model } = require("mongoose");
-const reactionSchema = require("./Reactions")
+const reactionSchema = require("./Reactions");
+const dayjs = require("dayjs")
+
+
 
 
 const thoughtSchema = new Schema(
+   
     {
         thoughtText: {
             type: String,
@@ -19,10 +23,13 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
-            timestamps: true,
+            timestamp: {
+                type: Date,
+                default: Date.now
+            }
+              },
+           
             
-
-        },
 
         username: {
             type: String,
@@ -32,14 +39,18 @@ const thoughtSchema = new Schema(
         reactions: [reactionSchema],
 
         }, 
-        // {
-        // toJSON: {
-        //     getters: true,
-        // },
-        // }
+        {
+        toJSON: {
+            getters: true,
+        },
+        
+        }
     
 );
 
+thoughtSchema.virtual("formattedDate").get(function(){
+    return dayjs(this.timestamp).format("MM-DD-YYYY HH:mm:ss");
+})
 const Thought = model("Thought", thoughtSchema);
 
 module.exports = Thought;

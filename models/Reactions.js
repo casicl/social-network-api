@@ -3,6 +3,7 @@
 //default value is set to new ObjectId
 //how to date, timestamp, use a getter method to format timestamp
 //this will not be a model, but used as the reaction field's subdocument schema in the thought model
+const dayjs = require("dayjs");
 
 const {Schema, Types} = require("mongoose");
 
@@ -28,16 +29,24 @@ const reactionSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            timestamp: {
+                type: Date,
+                default: Date.now
+            }
 
         },
 
     },
-    // {
-    //     toJSON: {
-    //       getters: true,
-    //     },
-    //     id: false,
-    //   }
+    {
+        toJSON: {
+          getters: true,
+        },
+       
+      }
 );
+
+reactionSchema.virtual("formattedDate").get(function() {
+    return dayjs(this.timestamp).format("MM-DD-YYYY HH:mm:ss");
+})
 module.exports = reactionSchema;
     
