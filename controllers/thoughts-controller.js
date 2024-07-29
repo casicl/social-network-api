@@ -48,10 +48,8 @@ module.exports = {
 
   async deleteThought(req, res) {
     try {
-      const { id } = req.params;
-      const thought = await Thought.findByIdAndDelete({
-        _id: req.params.thoughtId,
-      });
+      const { thoughtId } = req.params;
+      const thought = await Thought.findByIdAndDelete(thoughtId);
 
       if (!thought) {
         return res.status(404).json({ message: "Thought not found" });

@@ -11,9 +11,7 @@ module.exports = {
 
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId }).populate(
-        "friends"
-      );
+      const user = await User.findOne({ _id: req.params.userId }).populate("friends");
       // ({
       //     path: "friends",
       //     select: "username"
@@ -49,11 +47,17 @@ module.exports = {
 
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndDelete(req.body);
+      const user = await User.findByIdAndDelete({_id: req.params.userId});
+      if (!user) {
+        return res.status(404).json({message: "User not found"});
+      }     
+     
+
       res.json(user);
     } catch (error) {
       res.status(500).json(error);
     }
+   
   },
 
   async addFriend(req, res) {
